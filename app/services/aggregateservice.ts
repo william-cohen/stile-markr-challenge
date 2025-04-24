@@ -31,11 +31,7 @@ class AggregateService {
       return undefined
     }
 
-    console.log("Results: ", results)
-
     const resultPercentages = this.testResultsToPercentages(results)
-
-    console.log("Result Percentages: ", resultPercentages)
 
     const mean = calculateMean(resultPercentages)
     const stddev = calculateStdDev(resultPercentages, mean)
@@ -62,8 +58,6 @@ class AggregateService {
     results: TestResult[]
   ): number[] {
     const probablyCorrectTotalMarksAvailable = pickMostFrequent(results.map((result) => result.marksAvailable))
-
-    console.log("Probably Correct Total Marks Available: ", probablyCorrectTotalMarksAvailable)
 
     return results.map((result) => {
       const percentage = (result.marksObtained / probablyCorrectTotalMarksAvailable) * 100
@@ -124,10 +118,6 @@ const pickMostFrequent = (data: number[]): number => {
       mostFrequentValue = item
     }
   }
-
-  console.log(data)
-  console.log("Most Frequent Value: ", mostFrequentValue)
-  console.log("freuencyMap: ", frequencyMap)
 
   return mostFrequentValue
 }

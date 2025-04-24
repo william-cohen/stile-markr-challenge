@@ -4,10 +4,10 @@ FROM node:20
 WORKDIR /app
 
 # Copy files
-COPY package*.json ./
+COPY app/ .
+# Install dependencies
 RUN npm install
-COPY . .
 
 # Expose port and start app
-EXPOSE 3000
+EXPOSE 4567
 CMD ["npm", "run", "start"]

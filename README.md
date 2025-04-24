@@ -18,3 +18,11 @@ docker compose up
 ```bash
 docker compose up postgres
 ```
+
+Then
+
+```bash
+cd app
+npm run dev
+```
+

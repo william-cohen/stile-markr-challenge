@@ -24,7 +24,11 @@ class ImportController {
     const body = await c.req.text()
 
     try {
-      await this.importService.importXml(body)
+      const resultsWritten = await this.importService.importXml(body)
+      if (resultsWritten === 0) {
+        return c.text('No results imported', 400)
+      }
+      return c.text(`Imported ${resultsWritten} results`, 200)
     } catch (error) {
       if (error instanceof ImportError) {
         console.error('Error importing XML:', error)
@@ -33,10 +37,7 @@ class ImportController {
         console.error('Unexpected error:', error)
         return c.text('Unexpected error occurred during import', 500)
       }
-    }
-  
-    const requestBody = await c.req.text()
-    return c.text(requestBody, 200)
+    }    
   }
 }
 

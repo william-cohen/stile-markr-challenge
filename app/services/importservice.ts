@@ -61,9 +61,7 @@ class ImportService {
         throw new ImportError('Errors occurred during XML import: ' + errors.join('\n '))
       }
 
-      repo.upsertTestResults(results)
-
-      return results.length
+      return await this.saveResults(results)
 
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -73,6 +71,33 @@ class ImportService {
         throw error
       }
     }
+  }
+
+  private saveResults = async (results: TestResult[]): Promise<number> => {
+    if (results.length === 0) return 0
+    const repo = this.repo
+
+    // Deduplicate results by testId and studentNumber
+    const uniqueResults = new Map<string, TestResult>()
+    results.forEach(result => {
+      const key = `${result.testId}-${result.studentNumber}`
+      if (!uniqueResults.has(key)) {
+        // Pick the result with the highest marksObtained
+        const existingResult = uniqueResults.get(key)
+        if (existingResult && existingResult.marksObtained >= result.marksObtained) {
+          console.log(`Skipping duplicate result for ${key} with lower marksObtained`)
+          return
+        }
+        // Otherwise, add the new result
+        uniqueResults.set(key, result)
+      }
+    })
+    const deduplicatedResults = Array.from(uniqueResults.values())
+
+    await repo.upsertTestResults(deduplicatedResults)
+
+    return deduplicatedResults.length
+
   }
 
   private createZodSchema() {
