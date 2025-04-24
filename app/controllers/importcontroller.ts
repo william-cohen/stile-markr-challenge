@@ -28,7 +28,7 @@ class ImportController {
       if (resultsWritten === 0) {
         return c.text('No results imported', 400)
       }
-      return c.text(`Imported ${resultsWritten} results`, 200)
+      return c.text(`Imported ${resultsWritten} results`, 201)
     } catch (error) {
       if (error instanceof ImportError) {
         console.error('Error importing XML:', error)

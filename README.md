@@ -26,3 +26,12 @@ cd app
 npm run dev
 ```
 
+## Running tests
+
+First ensure the Postgres database is up and running via `docker compose up postgres`
+
+Then run
+```bash
+cd app
+npm run test
+```
