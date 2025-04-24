@@ -1,0 +1,2 @@
+# Ignore the 2Gb of transitive dependencies I'm about to pull in the next 2 hours
+app/node_modules

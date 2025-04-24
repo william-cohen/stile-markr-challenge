@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: markr-db
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+    volumes:
+      - data:/var/lib/postgresql/data
+    networks:
+      - markr-net
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: markr-api
+    environment:
+      DATABASE_URL: postgres://user:password@postgres:5432/testdb
+    ports:
+      - '4567:4567'
+    depends_on:
+      - postgres
+    networks:
+      - markr-net
+    command: npm run start
+
+volumes:
+  postgres-data:
+
+networks:
+  markr-net:
